@@ -6,8 +6,14 @@ function main(param: g.GameMainParameterObject): void {
       scene: scene,
       cssColor: "#ff0000",
       width: 32,
-      height: 32
+      height: 32,
     });
+
+
+
+
+
+
     rect.onUpdate.add(() => {
       // 以下のコードは毎フレーム実行されます。
       rect.x++;
