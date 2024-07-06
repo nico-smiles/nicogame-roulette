@@ -1,0 +1,31 @@
+{
+  "name": "nicogame-roulette",
+  "private": true,
+  "version": "0.1.0",
+  "description": "ニコ生ゲームプレ制作(安価ルーレット)",
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "rimraf ./script && tsc && akashic-cli-scan asset script",
+    "update": "akashic-cli-scan asset && akashic-cli-scan globalScripts",
+    "lint": "eslint -c .eslintrc.js \"src/**/*.ts\" --fix",
+    "start": "akashic-sandbox .",
+    "export-zip": "rimraf game.zip && akashic-cli-export zip -o game.zip -s",
+    "export-html": "rimraf game && akashic-cli-export html -o game"
+  },
+  "author": "SmileS",
+  "license": "",
+  "devDependencies": {
+    "@akashic/akashic-cli-export": "^1.7.51",
+    "@akashic/akashic-cli-scan": "^0.17.0",
+    "@akashic/akashic-engine": "^3.6.0",
+    "@akashic/akashic-sandbox": "^0.28.0",
+    "@akashic/eslint-config": "^1.1.0",
+    "@akashic/headless-akashic": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
+    "eslint": "^8.24.0",
+    "eslint-plugin-import": "^2.26.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.0"
+  }
+}
