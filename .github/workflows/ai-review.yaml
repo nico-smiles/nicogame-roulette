@@ -1,0 +1,51 @@
+# https://recruit.gmo.jp/engineer/jisedai/blog/chatgpt-pr-agent-github-actions/
+
+name: PR-Agent
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+  issue_comment:
+    types: [created, edited]
+  
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  pr_agent_job:
+    if: contains(github.event.pull_request.labels.*.name, 'AIレビュー対象') || contains(github.event.issue.labels.*.name, 'AIレビュー対象')
+    runs-on: ubuntu-latest
+    name: Run pr agent on every pull request
+    steps:
+      - name: PR Agent action step
+        id: pragent
+        uses: Codium-ai/pr-agent@main
+        env:
+          OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONFIG.model: gpt-4o-mini
+          CONFIG.model_turbo: gpt-4o-mini
+
+          #レビュー機能の設定
+          GITHUB_ACTION.AUTO_REVIEW: true
+          pr_reviewer.extra_instructions: "- 日本語でコメントしてください。 - This is a TypeScript project running on Akashic Engine, creating a game to be executed on the Niconico Live platform."
+          pr_reviewer.require_score_review: true #スコアを付ける
+          pr_reviewer.require_tests_review: false #テストについてはレビューしない
+          pr_reviewer.enable_review_labels_effort: false #レビューの重さラベルを付けない
+          pr_reviewer.enable_review_labels_security: false #セキュリティラベルを付けない
+          pr_reviewer.final_update_message: false #最終更新メッセージを追加する必要はない
+          pr_reviewer.inline_code_comments: true #インラインでのコメントOK
+
+          #概要機能の設定
+          GITHUB_ACTION.AUTO_DESCRIBE: true
+          pr_description.extra_instructions: "- 日本語でコメントしてください。 - This is a TypeScript project running on Akashic Engine, creating a game to be executed on the Niconico Live platform."
+          pr_description.final_update_message: false #最終更新メッセージを追加する必要はない
+          pr_description.publish_labels: false #ラベルを追加しない
+
+          #提案機能の設定
+          GITHUB_ACTION.AUTO_IMPROVE: false
+          pr_code_suggestions.extra_instructions: "- 日本語でコメントしてください。 - This is a TypeScript project running on Akashic Engine, creating a game to be executed on the Niconico Live platform."
+          pr_code_suggestions.rank_suggestions: true #提案をランク付けする
