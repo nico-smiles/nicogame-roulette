@@ -13,7 +13,12 @@ function rouletteFunction(): void {
  * @returns ルーレットで選ばれたユーザーのデータ
  */
 function getSelectedUser(objectForRoulette: userData[]): userData {
-    // ここに処理
+    // 当選してない人のみの配列を作る
+    const noSelectedUser = objectForRoulette.filter((user) => user.winningOrder === null);
+    // 当選していない人からランダムに1人選ぶ
+    const selectedUser = noSelectedUser[Math.floor(g.game.random.generate() * noSelectedUser.length)];
+    //todo: 動作確認してない
+    return selectedUser;
 }
 
 /**
@@ -29,7 +34,8 @@ function randomDisplay(objectForRoulette: userData[]): void {
  * @param objectForRoulette ユーザーデータが格納された配列
  */
 function showRouletteResults(objectForRoulette: userData[]): void {
-    // ここに処理
+    const top10Users = objectForRoulette.filter((user) => user.winningOrder !== null).sort((a, b) => b.winningOrder - a.winningOrder).slice(0, 10);
+    //todo: 動作確認してない
 }
 
 export = rouletteFunction;
